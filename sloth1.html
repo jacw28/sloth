@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap" rel="stylesheet">
+    <style> 
+
+    body {
+        font-family: 'Raleway', sans-serif;
+    }
+    
+    #box {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center; 
+    }
+
+#counter {
+  font-weight: bold;
+  transition: opacity .5s;
+}
+#counter::before {
+  content: '';
+  font-weight: normal;
+}
+
+p {
+    text-align: center;
+}
+
+#ouch {
+    display: none;
+}
+
+#sad {
+    display: none;
+}
+    
+    </style>
+    </head>
+    <body>
+        <div id="box">
+            <p>Click the GIF to help <br>the sloth scratch faster!</p>
+            <img id='sloth' width="400" src="sloth.gif" alt="" onclick='this.src=this.src'/>
+            <div style="margin:10px">
+                Scratches per second: <span id="counter">0</span>
+            </div>
+            <div id="ouch">Ouch that's too fast!😭</div>
+            <div id="sad">Can you scratch faster?🥺</div>
+        </div>
+          <script type='text/javascript'>
+
+            var started, resetTimeoutHandle, resetTimeout = 1000,
+                sloth = document.getElementById('sloth'),
+                clicks = 0;
+            
+            sloth.onseclect = sloth.onselectstart = function() {
+                return false;
+            };
+            
+            function clicksPerSecond(started, clicks) {
+                return clicks / ((new Date()) - started) * 1000;
+            }
+            
+            function count() {
+                clearTimeout(resetTimeoutHandle);
+                clicks++;
+                counter.innerText = clicksPerSecond(started, clicks);
+                if (clicksPerSecond(started, clicks) > 7 ) {
+                    document.getElementById('ouch').style.display = 'block';
+                }
+                if (clicksPerSecond(started, clicks) < 7) {
+                    document.getElementById('ouch').style.display = 'none';
+                }
+                if (clicksPerSecond(started, clicks) < 4) {
+                    document.getElementById('sad').style.display = 'block';
+                }
+                if (clicksPerSecond(started, clicks) > 4) {
+                    document.getElementById('sad').style.display = 'none';
+                }
+                resetTimeoutHandle = setTimeout(reset, resetTimeout);
+                return false;
+            }
+            
+            function start() {
+                started = new Date();
+                clicks = 0;
+                counter.style.opacity = 1;
+                this.onmousedown = count;
+                this.onmousedown();
+                return false;
+            }
+            
+            function reset() {
+                sloth.onmousedown = start;
+                counter.style.opacity = 0.3;
+                document.getElementById('ouch').style.display = 'none';
+                document.getElementById('sad').style.display = 'none';
+            }
+            
+            reset();
+            
+            </script>
+    </body>
+</html>
